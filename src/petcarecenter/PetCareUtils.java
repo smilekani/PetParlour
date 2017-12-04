@@ -179,4 +179,10 @@ public class PetCareUtils {
 			}
 		}
 	}
+	
+	public void addNewPet(Pets pet, PetOwnerRecord petOwnerRecord) {
+		petDetails.put(pet.getPetName(), pet);
+		ownerRecord.put(petOwnerRecord.getcusName(), petOwnerRecord);
+	}
+	
 }

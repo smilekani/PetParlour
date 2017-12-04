@@ -69,5 +69,10 @@ public class PetDataAPIImpl implements PetDataAPI
 		PetCareUtils.getInstance().getPetProductsReport();		
 	}
 
+	@Override
+	public void registerNewPet(Pets pet, PetOwnerRecord petOwnerRecord) {
+		PetCareUtils.getInstance().addNewPet(pet, petOwnerRecord);
+	}
+
 
 }

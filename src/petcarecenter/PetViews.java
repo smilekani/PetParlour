@@ -19,21 +19,11 @@ public class PetViews {
     
     System.out.println();
 
-/*    for ( int i = 1; i <= 58; i++ ) {
-        System.out.print( "-" );
-    }
-*/
     System.out.print( "------------------------------ WELCOME TO PETCARE CENTER -----------------------------------" );
 
-/*    for ( int j = 1; j <= 58; j++ ) {
-      System.out.print( "-" );
-    }
-*/    
-//    System.out.println();
-
-    System.out.println( "\n HELLO... I AM DUTY SECRETARY " );
-    System.out.println( "PLEASE ENTER YOUR NAME :" );
+    System.out.println( "\n\n HELLO... I AM DUTY SECRETARY " );
   }
+  
   public void printPetCareReport(){
     
     System.out.println(this);

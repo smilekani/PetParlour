@@ -17,25 +17,25 @@ import java.util.Set;
 public class PetControl {
 
 	private Scanner input = new Scanner(System.in);
-
 	PetViews view = new PetViews();
 	PetOwnerRecord owner = new PetOwnerRecord();
 	Pets petInputDetail;
 	private String cusName;
 	private int flag = 0;
-	private int count = 0;
 	private Set<String> allPetOwners;
+	private int petId = 110;
 
 	public PetControl() {
 		PetCareUtils.getInstance().initializePetCareRecords();
 	}
 
 	public void hints(){
-		System.out.println( " \033[0;1m THIS LIST OF NAME IS REGISTERED USER " );
+		int count = 0;
+		System.out.println( "THIS LIST OF REGISTERED PET USERS " );
 		allPetOwners = PetDataAPIImpl.getInstance().getAllPetOwners();
 		for( String s : allPetOwners ) {
 			count++;
-			System.out.print( " \033[0;1m  " + count +") " +s );
+			System.out.print("\n"+ count +") " +s );
 		}
 		System.out.println();
 	} 
@@ -88,29 +88,36 @@ public class PetControl {
 
 	public void dispayView(){		
 		view.printPetCareWelcome();
-		System.out.println("Type 'Exit' to Exit the Application");
 		while(true)
 		{
 			hints();
 			System.out.println("Please Select your Appointment Option from 1-4");
-			System.out.println("1.Pet Arrived for Service \n2.Appointment Process \n3.Final Monthly Report\n4.Pet Products Report");
+			System.out.println("1.New Pet Arrived for Service \n2.Registrated Pet Arrived for Service \n3.Appointment Process "
+					+ "\n4.Final Monthly Report\n4.Pet Products Report");
 			Scanner scanner = new Scanner(System.in);
 			int appointSelection = scanner.nextInt();
 			switch (appointSelection) {
 			case 1:
+				inputNewPetAndOwnerDetail();
+				break;
+			case 2:
 				ownerInputDetail();
 				petInputDetail = petsInputDetail();
 				appointmentProcess();
 				break;
-			case 2:
+			case 3:
 				appointmentProcess();
 				break;
-			case 3:
+			case 4:
 				finalReport();
 				break;
-			case 4:
+			case 5:
 				petProductsReport();
 				break;
+			case 6:
+				exitApplication();
+				break;
+
 			default:
 				break;
 			}
@@ -118,6 +125,37 @@ public class PetControl {
 
 			view.printPetCareReport();
 		}
+	}
+
+	private void inputNewPetAndOwnerDetail() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Registration for the New with its Owner Details\n");
+		System.out.println("Enter the Pet Type");
+		String petType = scanner.nextLine();
+		petId++;
+		String petid = String.valueOf(petId);
+		System.out.println("Enter the Pet Name");
+		String petName = scanner.nextLine();
+		System.out.println("Enter the Gender of the Pet: MALE or FEMALE");
+		String gender = scanner.nextLine();
+		System.out.println("Enter the  Pet's Age");
+		String age = scanner.nextLine();
+		System.out.println("Enter the Pet Breed");
+		String petBreed = scanner.nextLine();
+		System.out.println("Enter the PetOwner");
+		String petOwner = scanner.nextLine();
+		System.out.println("Enter the PetOwner Address");
+		String petOwnerAddr = scanner.nextLine();
+		System.out.println("Enter the PetOwner Contact Number");
+		String petOwnerContNo = scanner.nextLine();
+		Pets newPet = new Pets(petType, petid, petOwner, petName, gender, age, petBreed);
+		PetOwnerRecord petOwnerRecord = new PetOwnerRecord(petid, petOwner, petOwnerAddr, petOwnerContNo);
+		PetDataAPIImpl.getInstance().registerNewPet(newPet, petOwnerRecord);
+		System.out.println("The New Pet " + petName +" is added Succesfully");
+	}
+
+	private void exitApplication() {
+			System.exit(0);
 	}
 
 	private void petProductsReport() {
@@ -170,12 +208,7 @@ public class PetControl {
 		List<String> petProducts = new ArrayList<>();
 		System.out.println("Please type 'stop' for finish the Entering the Pet Products");
 		Scanner scanner = new Scanner(System.in);
-		String petProduct = scanner.next();
-		boolean isProductsRequired = true;
-
-		while(isProductsRequired)
-		{
-
+		String petProduct = scanner.nextLine();
 			petProducts.add(petProduct);
 			List<String> products = petInputDetail.getPetProducts();
 			if(products == null)
@@ -184,12 +217,9 @@ public class PetControl {
 			}
 			else
 			{
-				petProducts.addAll(products);
+				petProducts.add(petProduct);
 				petInputDetail.setPetProducts(petProducts);
 			}
-			if(petProduct.equalsIgnoreCase("stop"))
-				isProductsRequired = false;
-		}
 
 	}
 

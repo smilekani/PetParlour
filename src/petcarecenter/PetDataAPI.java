@@ -15,4 +15,5 @@ public interface PetDataAPI
 	List<PetSitters> getAllPetSitter();
 	void getFinalReport();
 	void getPetProductsReport();
+	void registerNewPet(Pets pet, PetOwnerRecord petOwnerRecord);
 }

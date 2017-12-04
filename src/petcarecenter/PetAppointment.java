@@ -26,19 +26,9 @@ public class PetAppointment {
 	public PetAppointment showTimeDetail(){
 		System.out.println( " APPOINTMENT TIME " );
 
-		for ( int i = 1; i <= 78; i++ ) {
-			System.out.print( "*" );
-		}
-		System.out.println();
-
-		System.out.print("                         APPOINTMENT TIME TABLE               ");
-		System.out.println();
-
-		for ( int j = 1; j <= 78; j++ ) {
-			System.out.print( "*" );
-		}
-
-		System.out.println();
+		System.out.println("******************************************************************************");
+		System.out.println("                         APPOINTMENT TIME TABLE               ");
+		System.out.println("******************************************************************************");
 
 		for ( int sw = 0; sw < workDays.length; sw++ ) {
 			String sDays = workDays[sw].substring( 3, workDays[sw].length() );
