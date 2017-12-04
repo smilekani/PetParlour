@@ -5,8 +5,6 @@
  */
 package petcarecenter;
 
-import java.util.Scanner;
-
 /**
  *
  * @author SOLOMON ANNAN

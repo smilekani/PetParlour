@@ -131,7 +131,6 @@ public class PetCareUtils {
 	public void getFinalReport()
 	{
 		List<PetSitters> allPetSitters = getAllPetSitter();
-		System.out.println("allPetSitters size ==== "+allPetSitters.size());
 		for (PetSitters petSitter : allPetSitters) {
 			int doneAppoints = 0;
 			int cancelledAppoints = 0;
@@ -140,7 +139,7 @@ public class PetCareUtils {
 			List<PetAppointment> totalAppointments = petSitter.getPetAppointment();
 			if(totalAppointments != null)
 			{
-			System.out.println("Total Appointments assigned to "+petSitter.getsName() +" = "+totalAppointments.size());
+			System.out.println("Total Appointments assigned to "+petSitter.getsName() +" is: "+totalAppointments.size()+"\n");
 			if(totalAppointments != null)
 			{
 				for (PetAppointment appointment : totalAppointments) {
@@ -161,14 +160,14 @@ public class PetCareUtils {
 			System.out.println("Cancelled Appointments = "+cancelledAppoints);
 			System.out.println("Failed To Attend Appointments = "+failedToAttendAppoints);
 			System.out.println("Booked Appointments = "+bookedAppoints);
-//			System.out.println("NO of Products Ordered = " + petSitter.getNoOfProdutsOrdered());
+			System.out.println("NO of Products Ordered = " + petSitter.getNoOfProductsOrdered());
 
 		}
 		
 	}
 	
 	public void getPetProductsReport() {
-		System.out.println("The List of Pet Products for the Shop are ");
+		System.out.println("The List of Pet Products for the Shop are \n ");
 		for (Pets pet : petDetails.values()) {
 			List<String> petProducts = pet.getPetProducts();
 			if(petProducts != null)

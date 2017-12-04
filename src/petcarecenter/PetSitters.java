@@ -14,6 +14,7 @@ import java.util.List;
 public class PetSitters {
   private String sName;
   private List<PetAppointment> petAppointment;
+  private int noOfProductsOrdered;
   
   public PetSitters() {
 }
@@ -40,7 +41,13 @@ public String getsName()
 	public void setPetAppointment(List<PetAppointment> petAppointment) {
 		this.petAppointment = petAppointment;
 	}
-	
-	
+
+	public int getNoOfProductsOrdered() {
+		return noOfProductsOrdered;
+	}
+
+	public void setNoOfProductsOrdered(int noOfProductsOrdered) {
+		this.noOfProductsOrdered = noOfProductsOrdered;
+	}
   
 }

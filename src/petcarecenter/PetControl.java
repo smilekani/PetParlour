@@ -37,7 +37,7 @@ public class PetControl {
 			count++;
 			System.out.print("\n"+ count +") " +s );
 		}
-		System.out.println();
+		System.out.println("\n\n");
 	} 
 
 
@@ -77,7 +77,7 @@ public class PetControl {
 		System.out.println("Pet age: "+petDetailForOwner.getPetAge());
 		System.out.println("Pet breeds: "+petDetailForOwner.getPetBreeds());
 
-			return petDetailForOwner;
+		return petDetailForOwner;
 	}
 
 	public PetAppointment bookAppointment(){
@@ -91,19 +91,20 @@ public class PetControl {
 		while(true)
 		{
 			hints();
-			System.out.println("Please Select your Appointment Option from 1-4");
+			System.out.println("Please Select your Appointment Option from 1-4\n");
 			System.out.println("1.New Pet Arrived for Service \n2.Registrated Pet Arrived for Service \n3.Appointment Process "
-					+ "\n4.Final Monthly Report\n4.Pet Products Report");
+					+ "\n4.Final Monthly Report\n5.Pet Products Report");
 			Scanner scanner = new Scanner(System.in);
 			int appointSelection = scanner.nextInt();
 			switch (appointSelection) {
 			case 1:
 				inputNewPetAndOwnerDetail();
+				appointmentServiceProcess("BOOKED");
 				break;
 			case 2:
 				ownerInputDetail();
 				petInputDetail = petsInputDetail();
-				appointmentProcess();
+				appointmentServiceProcess("BOOKED");
 				break;
 			case 3:
 				appointmentProcess();
@@ -123,7 +124,7 @@ public class PetControl {
 			}
 			System.out.println("Is Final Report is Needed, Please 'yes' to get the Final Report");
 
-			view.printPetCareReport();
+//			view.printPetCareReport();
 		}
 	}
 
@@ -155,7 +156,7 @@ public class PetControl {
 	}
 
 	private void exitApplication() {
-			System.exit(0);
+		System.exit(0);
 	}
 
 	private void petProductsReport() {
@@ -167,22 +168,22 @@ public class PetControl {
 	}
 
 	private void appointmentProcess() {
-		System.out.println("Please Select your Appointment Option from 1-4");
-		System.out.println("1.Booking\n2.Service Completion\n3.Appointment Cancellation\n4.Failed To Attend Updation");
+		System.out.println("Enter the Pet Owner Name");
 		Scanner scanner = new Scanner(System.in);
+		String ownerName = scanner.nextLine();
+		petInputDetail = PetDataAPIImpl.getInstance().getPetDetailForOwner(ownerName);
+		System.out.println("Please Select your Appointment Option from 1-4");
+		System.out.println("1.Service Completion\n2.Appointment Cancellation\n3.Failed To Attend Updation");
 		int appointSelection = scanner.nextInt();
 		switch (appointSelection) {
 		case 1:
-			appointmentServiceProcess("BOOKED");
-			break;
-		case 2:
 			appointmentServiceProcess("COMPLETED");
 			petProductsForTreatments();
 			break;
-		case 3:
+		case 2:
 			appointmentServiceProcess("FAILED_TO_ATTEND");
 			break;
-		case 4:
+		case 3:
 			appointmentServiceProcess("CANCELLED");
 			break;
 		default:
@@ -191,60 +192,55 @@ public class PetControl {
 	}
 
 	private void petProductsForTreatments() {
-		System.out.println("Is Pet Treatment Required?If yes Press 1 else Press 2");
-		Scanner scanner = new Scanner(System.in);
-		int treatmentSelection = scanner.nextInt();
-		switch (treatmentSelection) {
-		case 1:
-			enterPetProductDetails();
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	private void enterPetProductDetails() {
+		System.out.println("Please Enter the Pet Products for the treatment.");
 		List<String> petProducts = new ArrayList<>();
-		System.out.println("Please type 'stop' for finish the Entering the Pet Products");
 		Scanner scanner = new Scanner(System.in);
 		String petProduct = scanner.nextLine();
+		petProducts.add(petProduct);
+		List<String> products = petInputDetail.getPetProducts();
+		if(products == null)
+		{
+			petInputDetail.setPetProducts(petProducts);
+		}
+		else
+		{
 			petProducts.add(petProduct);
-			List<String> products = petInputDetail.getPetProducts();
-			if(products == null)
-			{
-				petInputDetail.setPetProducts(petProducts);
-			}
-			else
-			{
-				petProducts.add(petProduct);
-				petInputDetail.setPetProducts(petProducts);
-			}
+			petInputDetail.setPetProducts(petProducts);
+		}
 
 	}
 
 	private void appointmentServiceProcess(String appointmentType) {
 		PetAppointment bookAppointment = bookAppointment();
 		bookAppointment.setAppointmentStatus(appointmentType);
-		List<PetAppointment> bookedAppointments = petInputDetail.getBookedAppointments();
-		if(bookedAppointments == null)
-			bookedAppointments = new ArrayList<>();
-		bookedAppointments.add(bookAppointment);
-		PetSitters freeSitter = PetDataAPIImpl.getInstance().getFreeSitter();
-		if(freeSitter == null)
+		if(petInputDetail != null)
 		{
-			freeSitter = PetDataAPIImpl.getInstance().findAnotherFreeSitter();
-			System.out.println("freeSitter = "+freeSitter);
-		}
-		System.out.println("Free PitSitter is "+freeSitter.getsName());
-		List<PetAppointment> petAppointmentList = freeSitter.getPetAppointment();
+			List<PetAppointment> bookedAppointments = petInputDetail.getBookedAppointments();
+			if(bookedAppointments == null)
+				bookedAppointments = new ArrayList<>();
+			bookedAppointments.add(bookAppointment);
+			PetSitters freeSitter = PetDataAPIImpl.getInstance().getFreeSitter();
+			if(freeSitter == null)
+			{
+				freeSitter = PetDataAPIImpl.getInstance().findAnotherFreeSitter();
+				System.out.println("freeSitter = "+freeSitter);
+			}
+			System.out.println("Free PitSitter is "+freeSitter.getsName());
+			List<PetAppointment> petAppointmentList = freeSitter.getPetAppointment();
 
-		if(petAppointmentList == null)
-		{
-			petAppointmentList = new ArrayList<>();
+			if(petAppointmentList == null)
+			{
+				petAppointmentList = new ArrayList<>();
+			}
+			petAppointmentList.add(bookAppointment);
+			freeSitter.setPetAppointment(petAppointmentList);
+			freeSitter.setNoOfProductsOrdered(bookedAppointments.size());
+			PetDataAPIImpl.getInstance().updatePitSittersAppointment(freeSitter);
 		}
-		petAppointmentList.add(bookAppointment);
-		freeSitter.setPetAppointment(petAppointmentList);
-		PetDataAPIImpl.getInstance().updatePitSittersAppointment(freeSitter);	
+		else
+		{
+			System.out.println("Please Enter the Registered Pet Owner Name");
+			return;
+		}
 	}
 }
