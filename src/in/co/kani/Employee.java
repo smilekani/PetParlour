@@ -1,8 +1,6 @@
 package in.co.kani;
 
-import java.util.Comparator;
-
-public class Employee implements Comparator<Employee>{
+public class Employee implements Comparable<Employee>{
 	private int id;
 	private String name;
 	private String address;
@@ -42,13 +40,33 @@ public class Employee implements Comparator<Employee>{
 	}
 
 	@Override
+	public int compareTo(Employee o) {
+//		return (this.name.compareTo(o.getName())); Ascending Order by Name
+//		return (this.id - o.getId());  Ascending Order by Id
+//		return (o.getName().compareTo(this.name)); descending Order by Name
+		
+//		return (o.getId() - this.id );  descending Order by Id
+		
+		if(this.id == o.getId())
+		{
+			return 0;
+		}
+		else if(this.id > o.getId())
+		{
+			return 1;
+		}
+			return -1;
+		
+	}
+
+	/*@Override
 	public int compare(Employee o1, Employee o2) {
 		if(o1.getId() > o2.getId())
 			return 1;
 		else if(o1.getId() < o2.getId())
 			return -1;
 		return 0;
-	}
+	}*/
 	
 	
 }
